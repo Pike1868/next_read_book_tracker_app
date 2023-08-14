@@ -4,9 +4,9 @@
 {% block content%}
 
 <div class="m-4 container-sm">
-    <h1>Register Below</h1>
-    <p class="lead">Have an account? <a href="{{ url_for('main.login')}}">Login here</a></p>
-    <form id="user_register_form" method="POST" action="{{ url_for('main.register')}}">
+    <h1>Login Below</h1>
+    <p class="lead">Don't have an account? <a href="{{ url_for('main.home_page')}}">Register here</a></p>
+    <form method="POST" action="{{ url_for('main.login')}}">
 
         {{ form.hidden_tag() }}
 
@@ -18,7 +18,7 @@
         </p>
         {% endfor %}
 
-        <button id="user_register_form_button" class="btn btn-success" type="submit">Register</button>
+        <button class="btn btn-success" type="submit">Login</button>
 
     </form>
 </div>

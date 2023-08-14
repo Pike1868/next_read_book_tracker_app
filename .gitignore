@@ -5,3 +5,4 @@ venv/
 *.pyd
 .vscode/
 .env
+venv_wsl/
