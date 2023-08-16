@@ -32,7 +32,7 @@ class User(db.Model, UserMixin):
         return self.creation_date.strftime("%a %b %-d  %Y, %-I:%M %p")
     
     def __repr__(self):
-        return f"<User #{self.id}: {self.username}, {self.email}>"
+        return f"<User: {self.id}: {self.username}, {self.email}>"
     
     @staticmethod
     def hash_password(password):

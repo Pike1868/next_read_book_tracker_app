@@ -4,13 +4,13 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DEBUG = False
+    DEBUG = True
     TESTING = False
     CSRF_ENABLED = True
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_RECORD_QUERIES = True
     WTF_CSRF_ENABLED = True
-    DEBUG_TB_ENABLED = False
+    DEBUG_TB_ENABLED = True
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     
 class Testing:

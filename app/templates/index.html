@@ -2,26 +2,50 @@
 
 {% block title %} Next Read {% endblock %}
 {% block content%}
+<main id="content_block_container">
+    {% if current_user.is_anonymous %}
+    <div class="m-4 container-sm" id="register_form_container">
+        <h1>Register Below</h1>
+        <p class="lead">Have an account? <a href="#" id="show_login_form">Login here</a></p>
+        <form id="user_register_form">
 
-<div class="m-4 container-sm">
-    <h1>Register Below</h1>
-    <p class="lead">Have an account? <a href="{{ url_for('main.login')}}">Login here</a></p>
-    <form id="user_register_form" method="POST" action="{{ url_for('main.register')}}">
+            {{ register_form.hidden_tag() }}
 
-        {{ form.hidden_tag() }}
+            {% for field in register_form
+            if field.widget.input_type != 'hidden' %}
+            <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            </p>
+            {% endfor %}
 
-        {% for field in form
-        if field.widget.input_type != 'hidden' %}
-        <p>
-            {{ field.label }}
-            {{ field(class_="form-control") }}
-        </p>
-        {% endfor %}
+            <button id="user_register_form_button" class="btn btn-success" type="submit">Register</button>
 
-        <button id="user_register_form_button" class="btn btn-success" type="submit">Register</button>
+        </form>
+    </div>
 
-    </form>
-</div>
+    <div class="m-4 container-sm" id="login_form_container">
+        <h1>Login Below</h1>
+        <p class="lead">Don't have an account? <a href="#" id="show_register_form">Register here</a></p>
+        <form id="user_login_form">
 
+            {{ login_form.csrf_token }}
+            <p>
+                <label for="login_email">Email</label>
+                <input class="form-control" id="login_email" name="login_email" type="email">
+            </p>
+            <p>
+                <label for="login_password">Password</label>
+                <input class="form-control" id="login_password" name="login_password" type="password">
+            </p>
+            <button id="user_login_form_button" class="btn btn-success" type="submit">Login</button>
+
+        </form>
+    </div>
+    {% else %}
+    <h1>Welcome back</h1>
+    {% endif %}
+
+</main>
 
 {% endblock %}

@@ -6,14 +6,13 @@ chardet==4.0.0
 cryptography==3.4.8
 Cython==3.0.0
 dl==0.1.0
-Flask==2.3.2
-Flask==2.0.1
+Flask
 Flask_Bcrypt==1.0.1
 Flask_DebugToolbar==0.13.1
 Flask_Login==0.6.2
 flask_migrate==4.0.4
 flask_restful==0.3.10
-flask_sqlalchemy==3.0.5
+flask_sqlalchemy
 Flask_WTF==1.1.1
 ipaddr==2.2.0
 keyring==23.5.0
@@ -21,8 +20,7 @@ mock==5.1.0
 mypy_extensions==1.0.0
 numpy==1.21.5
 ordereddict==1.1
-pyOpenSSL==21.0.0
-pyOpenSSL==23.2.0
+pyOpenSSL
 simplejson==3.17.6
 SQLAlchemy==2.0.17
 typing_extensions==4.7.1
