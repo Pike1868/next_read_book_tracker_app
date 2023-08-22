@@ -1,11 +1,13 @@
 from flask import Flask
 from .models import db, connect_db, bcrypt
 from .config import Config
-from .routes.main_routes import main
+from .routes.users import users, book
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_restful import Api
+from dotenv import load_dotenv
+load_dotenv()
 
 # Set flask app environment variable with cmd below before flask run
 # export FLASK_APP="app:create_app('Config')"
@@ -38,13 +40,14 @@ def create_app(config_name):
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'main.login'
-    login_manager.login_message = "Please login in to access this page."
+    login_manager.login_view = 'users.sign_in'
+    login_manager.login_message = "Please sign in to access this page."
     login_manager.login_message_category = "danger"
 
     migrate = Migrate(app, db)
 
-    app.register_blueprint(main)
+    app.register_blueprint(users)
+    app.register_blueprint(book)
     api.init_app(app)
 
     return app

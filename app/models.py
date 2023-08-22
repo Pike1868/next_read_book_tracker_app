@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(30))
     bio = db.Column(db.Text)
     location = db.Column(db.Text)
-    image_url = db.Column(db.Text,default="static/images/default-pic.png")
+    image_url = db.Column(db.Text,default="/static/images/default-pic.png")
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     hashed_password = db.Column(db.Text, nullable=False)
     

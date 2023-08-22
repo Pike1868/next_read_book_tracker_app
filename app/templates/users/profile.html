@@ -1,0 +1,38 @@
+{% extends '/users/base.html'%}
+
+{% block title %} Next Read {% endblock %}
+{% block content%}
+
+<div class="container w-75 my-5 bg-light p-5 d-flex justify-content-between">
+    <div>
+        <div class="col-4">
+            <img src="{{current_user.image_url}}" width="150" height="150" alt="{{current_user.username}}'s profile img"
+                class="rounded-circle">
+            <h3>{{current_user.username}}</h3>
+            <p>Bio:{{current_user.bio}}</p>
+            <p>Location:{{current_user.location}}</p>
+        </div>
+        <div>
+            <a href="/profile/edit" class="btn btn-outline-secondary">Edit Profile</a>
+            <a href="/profile/delete" class="btn btn-outline-danger">Delete Profile</a>
+        </div>
+    </div>
+    <div class="col-6 d-flex flex-column justify-content-between">
+        <div>
+            <h4 class="font-weight-bold">Currently Reading</h4>
+            <ul></ul>
+        </div>
+        <div>
+            <h4 class="font-weight-bold">Previously Read</h4>
+            <ul></ul>
+        </div>
+        <div>
+            <h4 class="font-weight-bold">Want To Read</h4>
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
