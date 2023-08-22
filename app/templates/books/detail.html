@@ -1,0 +1,24 @@
+{% extends '/users/base.html'%}
+
+{% block content%}
+<div class="container w-50">
+    <h2>{{ book['title'] }}</h2>
+
+    <form action="/save-book" method="POST" id="bookStatusForm">
+        <input type="hidden" name="book_id" value="{{ book['id'] }}">
+        <button type="submit" class="btn btn-outline-dark" name="status" value="previously_read">Previously
+            Read</button>
+        <button type="submit" class="btn btn-outline-dark" name="status" value="currently_reading">Currently
+            Reading</button>
+        <button type="submit" class="btn btn-outline-dark" name="status" value="want_to_read">Want To Read</button>
+    </form>
+
+    <p>Author: {{ ', '.join(book['authors']) }}</p>
+    <p>Published Date: {{ book['publishedDate'] }}</p>
+    <p>Avg. Rating: {{ book["averageRating"] }}</p>
+    <p>Ratings Count: {{ book["ratingsCount"] }}</p>
+    <img src="{{ book['imageLinks']['thumbnail'] }}" alt="{{ book['title'] }} thumbnail"
+        style="max-width: 100%; height: auto;">
+    <p>{{ book.description }}</p>
+</div>
+{% endblock%}

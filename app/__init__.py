@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, Blueprint
 from .models import db, connect_db, bcrypt
 from .config import Config
-from .routes.users import users, book
+from .routes.users import users_bp as users
+from .routes.books import books_bp as books
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -40,14 +41,14 @@ def create_app(config_name):
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'users.sign_in'
-    login_manager.login_message = "Please sign in to access this page."
+    login_manager.login_view = 'users_bp.sign_in'
+    login_manager.login_message = "Please sign in to access this page/feature."
     login_manager.login_message_category = "danger"
 
     migrate = Migrate(app, db)
 
     app.register_blueprint(users)
-    app.register_blueprint(book)
+    app.register_blueprint(books)
     api.init_app(app)
 
     return app

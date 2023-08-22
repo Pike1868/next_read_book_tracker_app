@@ -21,7 +21,7 @@
                     <p class="lead font-weight-normal my-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                         Alias
                         similique, id maiores sit laboriosam neque nihil libero quo. Reprehenderit, totam?</p>
-                    <form method="POST" action="{{url_for('book.search_google_books')}}" class="d-flex ">
+                    <form method="POST" action="{{url_for('books_bp.search_google_books')}}" class="d-flex ">
                         <input class="form-control me-2 p-2" type="search" placeholder="Search books"
                             aria-label="search" name="search">
                         <button class="btn btn-success col-2" type="submit">Search
@@ -37,7 +37,8 @@
             <div class="row mb-3">
                 {% for book in books %}
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
-                    <a href="{{ url_for('book.detail', volume_id=book.id) }}">
+                    <a href="{{ url_for('books_bp.detail', volume_id=book.id) }}"
+                        class="text-decoration-none text-black">
                         <div class="book bg-grey"
                             style="width: 250px; height: 400px; overflow: hidden; border: 1px solid #ddd;">
                             <h4 style="white-space: wrap; overflow: hidden; text-overflow: ellipsis;">{{
@@ -46,6 +47,7 @@
                                 book.authors[0] }}</p>
                             <img src="{{ book.thumbnail }}" alt="{{ book.title }}"
                                 style="max-width: 100%; height: auto;">
+                            <p class="font-weight-bold">Avg. Rating: {{book.average_rating}}</p>
                             <p>{{book.description}}</p>
                         </div>
                     </a>

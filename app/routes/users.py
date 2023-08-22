@@ -9,11 +9,10 @@ import os
 
 api_key = os.environ.get('API_KEY')
 
-users = Blueprint('users', __name__)
-book = Blueprint('book', __name__)
+users_bp = Blueprint('users_bp', __name__)
 
 
-@users.route('/', methods=["GET"])
+@users_bp.route('/', methods=["GET"])
 def home():
     """Show app homepage"""
     form = UserRegistrationForm()
@@ -21,7 +20,7 @@ def home():
     return render_template("/users/index.html", form=form)
 
 
-@users.route('/sign_up', methods=["GET"])
+@users_bp.route('/sign_up', methods=["GET"])
 def sign_up_form():
     """Show user sign up form"""
     form = UserRegistrationForm()
@@ -29,7 +28,7 @@ def sign_up_form():
     return render_template("/users/sign_up.html", form=form)
 
 
-@users.route('/sign_up', methods=["POST"])
+@users_bp.route('/sign_up', methods=["POST"])
 def sign_up():
     """Handle user sign up form submission"""
     form = UserRegistrationForm()
@@ -44,7 +43,7 @@ def sign_up():
 
         if existing_username:
             form.username.errors.append("Username taken, please pick another.")
-            return redirect(url_for("users.home"))
+            return redirect(url_for("users_bp.home"))
 
         if existing_email:
             form.username.errors.append(
@@ -63,12 +62,12 @@ def sign_up():
             print("Error")
             return render_template('/users/index.html', form=form)
         flash('Welcome! Successfully Created Your Account!', "success")
-        return redirect(url_for("users.logged_in_page"))
+        return redirect(url_for("users_bp.logged_in_page"))
 
     return render_template("", form=form)
 
 
-@users.route('/sign_in', methods=["GET"])
+@users_bp.route('/sign_in', methods=["GET"])
 def sign_in_form():
     """Show sign in form"""
     form = UserLoginForm()
@@ -76,12 +75,12 @@ def sign_in_form():
     return render_template("/users/sign_in.html", form=form)
 
 
-@users.route('/sign_in', methods=['POST'])
+@users_bp.route('/sign_in', methods=['POST'])
 def sign_in():
     """Check user credentials, sign_in user"""
     if current_user.is_authenticated:
         flash("Your already logged in!")
-        return redirect(url_for("users.home"))
+        return redirect(url_for("users_bp.home"))
 
     form = UserLoginForm()
     if form.validate_on_submit():
@@ -93,7 +92,7 @@ def sign_in():
         if user and user.check_password(password):
             login_user(user)
             flash(f"Welcome Back, {current_user.username}!", "primary")
-            return redirect(url_for("users.home"))
+            return redirect(url_for("users_bp.home"))
         else:
             current_app.logger.info('User authentication failed')
             form.email.errors = ['Invalid email/password.']
@@ -103,14 +102,14 @@ def sign_in():
     return render_template('/users/sign_in.html', form=form)
 
 
-@users.route("/profile", methods=["GET"])
+@users_bp.route("/profile", methods=["GET"])
 @login_required
 def user_profile():
 
     return render_template("/users/profile.html")
 
 
-@users.route("/profile/edit",  methods=["GET"])
+@users_bp.route("/profile/edit",  methods=["GET"])
 @login_required
 def edit_user_form():
     form = EditUserForm()
@@ -120,7 +119,7 @@ def edit_user_form():
 # Should be a PUT method?
 
 
-@users.route("/profile/edit",  methods=["POST"])
+@users_bp.route("/profile/edit",  methods=["POST"])
 @login_required
 def edit_user_profile():
     form = EditUserForm()
@@ -134,23 +133,25 @@ def edit_user_profile():
         user.bio = form.bio.data
         user.location = form.location.data
         user.image_url = form.image_url.data
-
-        print("++++++++++++++++++++++++")
-        print(user)
-        print("+++++++++++++++++++++++++")
-        db.session.add(user)
-        db.session.commit()
-        
-        return redirect(url_for("users.user_profile"))
+        try:    
+            print(user)
+            db.session.add(user)
+            db.session.commit()
+            flash("Profile updated successfully", "success")
+            return redirect(url_for("users_bp.user_profile"))
+        except IntegrityError:
+            db.session.rollback()
+            flash("Error, please select a new username or email")
     else:
-        flash("Incorrect password, profile was not updated.", "danger")
-        return redirect(url_for("users.user_profile"))
+        flash("Form validation failed, profile was not updated.", "danger")
+        return redirect(url_for("users_bp.user_profile"))
 
-@users.route("/logout", methods=["POST"])
+
+@users_bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
 
     logout_user()
     flash("Goodbye!", "info")
 
-    return redirect(url_for("users.home"))
+    return redirect(url_for("users_bp.home"))
