@@ -11,6 +11,14 @@
 
         {% for field in form
         if field.widget.input_type != 'hidden' %}
+
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <span class="text-danger">
+            {{ error }}
+        </span>
+        {% endfor %}
+        {% endif %}
         <p>
             {{ field.label }}
             {{ field(class_="form-control") }}

@@ -43,12 +43,12 @@ def sign_up():
 
         if existing_username:
             form.username.errors.append("Username taken, please pick another.")
-            return redirect(url_for("users_bp.home"))
+            return render_template("/users/sign_up.html", form=form)
 
         if existing_email:
-            form.username.errors.append(
+            form.email.errors.append(
                 "Email is already is registered, please try logging in.")
-            return redirect(url_for("users.sign_in"))
+            return render_template("/users/sign_up.html", form=form)
 
         new_user = User(username=username, password=password, email=email)
         print(f"New User to add:{new_user}")
@@ -62,9 +62,9 @@ def sign_up():
             print("Error")
             return render_template('/users/index.html', form=form)
         flash('Welcome! Successfully Created Your Account!', "success")
-        return redirect(url_for("users_bp.logged_in_page"))
+        return redirect(url_for("users_bp.home"))
 
-    return render_template("", form=form)
+    return render_template("/users/sign_up.html", form=form)
 
 
 @users_bp.route('/sign_in', methods=["GET"])
@@ -84,10 +84,10 @@ def sign_in():
 
     form = UserLoginForm()
     if form.validate_on_submit():
-        email = form.email.data
+        username = form.username.data
         password = form.password.data
 
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
             login_user(user)
@@ -95,7 +95,7 @@ def sign_in():
             return redirect(url_for("users_bp.home"))
         else:
             current_app.logger.info('User authentication failed')
-            form.email.errors = ['Invalid email/password.']
+            form.username.errors = ['Invalid username/password.']
     else:
         current_app.logger.info('Form not submitted or not validated')
 
@@ -133,7 +133,7 @@ def edit_user_profile():
         user.bio = form.bio.data
         user.location = form.location.data
         user.image_url = form.image_url.data
-        try:    
+        try:
             print(user)
             db.session.add(user)
             db.session.commit()
@@ -155,3 +155,21 @@ def logout():
     flash("Goodbye!", "info")
 
     return redirect(url_for("users_bp.home"))
+
+##############################################################################
+# Turn off all caching in Flask
+#   (useful for dev; in production, this kind of stuff is typically
+#   handled elsewhere)
+#
+# https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+
+
+@users_bp.after_request
+def add_header(req):
+    """Add non-caching headers on every request."""
+
+    req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    req.headers["Pragma"] = "no-cache"
+    req.headers["Expires"] = "0"
+    req.headers['Cache-Control'] = 'public, max-age=0'
+    return req

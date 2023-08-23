@@ -20,8 +20,6 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.Text, nullable=False, unique=True)
-    first_name = db.Column(db.String(30))
-    last_name = db.Column(db.String(30))
     bio = db.Column(db.Text)
     location = db.Column(db.Text)
     image_url = db.Column(db.Text, default="/static/images/default-pic.png")
@@ -68,6 +66,7 @@ class Book(db.Model):
     thumbnail_url = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text)
     published_date = db.Column(db.Date)
+    
 
     users = db.relationship('UserBooks', backref='book', cascade='all, delete')
 

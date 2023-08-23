@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Flask
 from .models import db, connect_db, bcrypt
 from .config import Config
 from .routes.users import users_bp as users
