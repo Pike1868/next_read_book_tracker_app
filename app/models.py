@@ -66,7 +66,9 @@ class Book(db.Model):
     thumbnail_url = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text)
     published_date = db.Column(db.Date)
-    
+    average_rating = db.Column(db.Float)
+    ratings_count = db.Column(db.Integer)
+    page_count = db.Column(db.Integer)
 
     users = db.relationship('UserBooks', backref='book', cascade='all, delete')
 

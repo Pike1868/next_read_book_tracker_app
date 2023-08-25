@@ -116,8 +116,6 @@ def edit_user_form():
 
     return render_template("/users/edit.html", form=form)
 
-# Should be a PUT method?
-
 
 @users_bp.route("/profile/edit",  methods=["POST"])
 @login_required
@@ -128,13 +126,10 @@ def edit_user_profile():
         user = current_user
         user.username = form.username.data
         user.email = form.email.data
-        user.first_name = form.first_name.data
-        user.last_name = form.last_name.data
         user.bio = form.bio.data
         user.location = form.location.data
         user.image_url = form.image_url.data
         try:
-            print(user)
             db.session.add(user)
             db.session.commit()
             flash("Profile updated successfully", "success")

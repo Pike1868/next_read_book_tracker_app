@@ -50,6 +50,25 @@ def save_book():
     book_id = request.form.get('book_id')
     status = request.form.get('status')
 
+    book = Book.query.filter_by(id=book_id).first()
+
+    if not book:
+        response = requests.get(
+            f"https://www.googleapis.com/books/v1/volumes/{book_id}?key={os.environ.get('API_KEY')}")
+        data = response.json()["volumeInfo"]
+
+        new_book = Book(
+            id=book_id,
+            title=data.get("Title", "Unknown Title"),
+            authors=", ".join(data.get("authors", ["Unknown Author"])),
+            thumbnail=data.get("imageLinks", {}).get("thumbnail", ""),
+            description=data.get("description", "No description available."),
+            published_date=data.get("publishedDate", "Date not available"),
+            average_rating=data.get("averageRating", None),
+            ratings_count=data.get("ratingsCount", 0),
+            page_count=data.get("pageCount")
+        )
+
     return redirect(url_for('users_bp.user_profile'))
 
 
