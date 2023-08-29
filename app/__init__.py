@@ -1,12 +1,12 @@
 from flask import Flask
 from .models import db, connect_db, bcrypt
 from .config import Config
+from .routes.users import main_bp as main
 from .routes.users import users_bp as users
 from .routes.books import books_bp as books
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from flask_restful import Api
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -26,9 +26,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-api = Api()
-
-
 def create_app(config_name):
     """Flask Application Factory function: Creates the flask app context, initializes 
        extensions using the app instance, registers blueprints, returns the app."""
@@ -36,7 +33,6 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(f"app.config.{config_name}")
     connect_db(app)
-
     toolbar = DebugToolbarExtension(app)
     db.init_app(app)
     bcrypt.init_app(app)
@@ -47,8 +43,8 @@ def create_app(config_name):
 
     migrate = Migrate(app, db)
 
+    app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(books)
-    api.init_app(app)
 
     return app

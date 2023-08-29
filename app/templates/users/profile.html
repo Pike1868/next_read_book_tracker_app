@@ -13,22 +13,73 @@
             <p class="font-weight-bold">Location:{{current_user.location}}</p>
         </div>
         <div>
-            <a href="/profile/edit" class="btn btn-outline-secondary">Edit Profile</a>
+            <a href="{{ url_for('users_bp.edit_user_form')}}" class="btn btn-outline-secondary">Edit Profile</a>
             <a href="/profile/delete" class="btn btn-outline-danger">Delete Profile</a>
         </div>
     </div>
     <div class="col-6 d-flex flex-column justify-content-between">
-        <div>
+        <div class="container">
             <h4 class="font-weight-bold">Currently Reading</h4>
-            <ul></ul>
+            <div class="row">
+                {% for book in currently_reading %}
+                <div class="col-sm book-card users-books">
+                    <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}">
+                        <h6 class="text-truncate">{{book.title}}</h6>
+                        <img src="{{ book.thumbnail_url }}" width="50" height="50" alt="{{ book.title }} thumbnail"
+                            class="book-thumbnail">
+                    </a>
+                    <form action="{{url_for('books_bp.remove_user_book', volume_id=book.google_books_id)}}"
+                        method="POST">
+                        <button type="submit">
+                            <img id="trash-icon" src="{{ url_for('static', filename='images/trash-can.png') }}"
+                                alt="trash can icon">
+                        </button>
+
+                    </form>
+                </div>
+
+                {% endfor %}
+            </div>
         </div>
-        <div>
+        <div class="container">
             <h4 class="font-weight-bold">Previously Read</h4>
-            <ul></ul>
+            <div class="row">
+                {% for book in previously_read %}
+                <div class="col-sm book-card users-books">
+                    <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}">
+                        <h6 class="text-truncate">{{book.title}}</h6>
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }} thumbnail" class="book-thumbnail">
+                    </a>
+                    <form action="{{url_for('books_bp.remove_user_book', volume_id=book.google_books_id)}}"
+                        method="POST">
+                        <button type="submit">
+                            <img id="trash-icon" src="{{ url_for('static', filename='images/trash-can.png') }}"
+                                alt="trash can icon">
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        <div>
+        <div class="container">
             <h4 class="font-weight-bold">Want To Read</h4>
-            <ul></ul>
+            <div class="row">
+                {% for book in want_to_read %}
+                <div class="col-sm book-card users-books">
+                    <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}">
+                        <h6 class="text-truncate">{{book.title}}</h6>
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }} thumbnail" class="book-thumbnail">
+                    </a>
+                    <form action="{{url_for('books_bp.remove_user_book', volume_id=book.google_books_id)}}"
+                        method="POST">
+                        <button type="submit">
+                            <img id="trash-icon" src="{{ url_for('static', filename='images/trash-can.png') }}"
+                                alt="trash can icon">
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

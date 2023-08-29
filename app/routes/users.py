@@ -2,17 +2,18 @@ from flask import render_template, request, jsonify
 from flask import Blueprint, render_template, redirect, flash, url_for, current_app, request
 from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from ..models import User, db
+from ..models import User, db, UserBooks
 from ..forms import UserRegistrationForm, UserLoginForm, EditUserForm
-import requests
 import os
 
 api_key = os.environ.get('API_KEY')
 
-users_bp = Blueprint('users_bp', __name__)
+
+main_bp = Blueprint('main_bp', __name__)
+users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
 
 
-@users_bp.route('/', methods=["GET"])
+@main_bp.route('/', methods=["GET"])
 def home():
     """Show app homepage"""
     form = UserRegistrationForm()
@@ -62,7 +63,7 @@ def sign_up():
             print("Error")
             return render_template('/users/index.html', form=form)
         flash('Welcome! Successfully Created Your Account!', "success")
-        return redirect(url_for("users_bp.home"))
+        return redirect(url_for("main_bp.home"))
 
     return render_template("/users/sign_up.html", form=form)
 
@@ -80,7 +81,7 @@ def sign_in():
     """Check user credentials, sign_in user"""
     if current_user.is_authenticated:
         flash("Your already logged in!")
-        return redirect(url_for("users_bp.home"))
+        return redirect(url_for("main_bp.home"))
 
     form = UserLoginForm()
     if form.validate_on_submit():
@@ -92,7 +93,7 @@ def sign_in():
         if user and user.check_password(password):
             login_user(user)
             flash(f"Welcome Back, {current_user.username}!", "primary")
-            return redirect(url_for("users_bp.home"))
+            return redirect(url_for("main_bp.home"))
         else:
             current_app.logger.info('User authentication failed')
             form.username.errors = ['Invalid username/password.']
@@ -106,7 +107,16 @@ def sign_in():
 @login_required
 def user_profile():
 
-    return render_template("/users/profile.html")
+    users_books_previously_read = UserBooks.query.filter_by(
+        user_id=current_user.id, status="previously_read").all()
+
+    users_books_currently_reading = UserBooks.query.filter_by(
+        user_id=current_user.id, status="currently_reading").all()
+
+    users_books_want_to_read = UserBooks.query.filter_by(
+        user_id=current_user.id, status="want_to_read").all()
+
+    return render_template("/users/profile.html", previously_read=[ub.book for ub in users_books_previously_read], currently_reading=[ub.book for ub in users_books_currently_reading], want_to_read=[ub.book for ub in users_books_want_to_read])
 
 
 @users_bp.route("/profile/edit",  methods=["GET"])
@@ -149,7 +159,7 @@ def logout():
     logout_user()
     flash("Goodbye!", "info")
 
-    return redirect(url_for("users_bp.home"))
+    return redirect(url_for("main_bp.home"))
 
 ##############################################################################
 # Turn off all caching in Flask

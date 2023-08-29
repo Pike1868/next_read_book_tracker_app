@@ -17,25 +17,25 @@
 <body>
     <header class="p-3 text-bg-dark">
         <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-between">
-                <ul class="nav col-2 mb-2 justify-content-start mb-md-0">
+            <div class="d-flex flex-wrap align-items-center justify-content-around">
+                <ul class="nav col-2 col-md-2 mb-2 mb-md-0">
                     <li>
-                        <a href="{{ url_for('users_bp.home') }}"
+                        <a href="{{ url_for('main_bp.home') }}"
                             class="nav-link py-2 px-3 text-secondary btn btn-outline-light fw-bold">Home</a>
                     </li>
                 </ul>
                 {% if request.path != '/' %}
-                <div id="search_bar_container" class=" col-4 col-md-6 justify-content-between">
+                <div id="search_bar_container" class=" col-6 col-md-4 justify-content-between">
                     <form method="POST" action="{{url_for('books_bp.search_google_books')}}" class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search books" aria-label="search"
-                            name="search">
-                        <button class="btn btn-success col-2" type="submit">Search
+                        <input class="form-control me-2 col-8 col-md-10" type="search" placeholder="Search books"
+                            aria-label="search" name="search">
+                        <button class="btn btn-success col-4 col-md-3 text-nowrap" type="submit">Search
                         </button>
                     </form>
                 </div>
                 {% endif %}
 
-                <div class="d-flex col-2 justify-content-between">
+                <div class="d-flex col-3 col-md-2 justify-content-around">
                     {% if current_user.is_authenticated %}
                     <a class="navbar-brand" href="{{ url_for('users_bp.user_profile', user_id=current_user.id) }}">
                         <img src="{{current_user.image_url}}" width="50" height="50"
@@ -44,7 +44,8 @@
                     <form method="POST" action="{{url_for('users_bp.logout')}}"><button type="submit"
                             class="btn btn-outline-light me-2">Logout</button></form>
                     {% else %}
-                    <a href="{{url_for('users_bp.sign_in')}}"><button type="button" class="btn btn-outline-light me-2">Sign
+                    <a href="{{url_for('users_bp.sign_in')}}"><button type="button"
+                            class="btn btn-outline-light me-2">Sign
                             in</button></a>
                     <a href="{{url_for('users_bp.sign_up')}}"><button type="button" class="btn btn-outline-success">Sign
                             up</button></a>
