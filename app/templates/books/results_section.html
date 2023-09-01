@@ -15,9 +15,17 @@
         </div>
 
     {% endfor %}
-    <form method="POST" action="/search">
-        <input type="hidden" name="search" value="{{ query }}">
-        <input type="hidden" name="startIndex" value="{{ startIndex }}">
-        <button type="submit" value="More Books" class="btn btn-outline-dark">More Books</button>
-    </form>
+    {% if startIndex != 0 %}
+<form method="POST" action="/search">
+    <input type="hidden" name="query" value="{{ query }}">
+    <input type="hidden" name="startIndex" value="{{ startIndex - 40 }}">
+    <button type="submit" class="btn btn-outline-dark">Previous</button>
+</form>
+{% endif %}
+<form method="POST" action="/search">
+    <input type="hidden" name="query" value="{{ query }}">
+    <input type="hidden" name="startIndex" value="{{ startIndex + 40 }}">
+    <button type="submit" class="btn btn-outline-dark">Next</button>
+</form>
+
 </div>

@@ -8,7 +8,7 @@ body {
 }
 
 .book-card {
-  min-width: 150px; /* adjust this value to fit your design */
+  min-width: 75px; 
   border: 1px solid #ccc;
   padding: 15px;
   margin: 10px;
@@ -40,7 +40,7 @@ h4.font-weight-bold {
 }
 
 #user_books_section {
-  max-width: 300px; /* adjust this value to fit your design */
+  max-width: 150px; 
 }
 
 #trash-icon {
