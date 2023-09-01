@@ -1,0 +1,80 @@
+<div class="  bg-secondary-green" id="user_books_section">
+    
+        <div class="container">
+            <h4 class="font-weight-bold m-0">Currently Reading</h4>
+            <div class="row flex-nowrap">
+                {% if currently_reading%}
+                {% for book in currently_reading %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
+                    <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
+                        class="text-decoration-none text-dark">
+                        <div class="book-card bg-grey border rounded p-3">
+                            <!-- <h6 class="text-truncate">{{book.title}}</h6>
+                            <p class="text-truncate">Author: {{
+                                book.authors[0] }}</p> -->
+                            <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col-sm">
+                    <p>You have no books in your currently reading list.</p>
+                </div>
+                {% endif%}
+            </div>
+        </div>
+
+    <div class="container">
+        <h4 class="font-weight-bold">Previously Read</h4>
+        <div class="row d-block">
+            {% if previously_read%}
+            {% for book in previously_read %}
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
+                <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
+                    class="text-decoration-none text-dark">
+                    <div class="book-card bg-grey border rounded p-3">
+                        <!-- <h6 class="text-truncate">{{book.title}}</h6>
+                        <p class="text-truncate">Author: {{
+                            book.authors[0] }}</p> -->
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
+                    </div>
+                </a>
+            </div>
+
+            {% endfor %}
+            {% else %}
+            <div class="col-sm">
+                <p>You have no books in previously read list.</p>
+            </div>
+            {% endif%}
+        </div>
+    </div>
+    <div class="container">
+        <h4 class="font-weight-bold">Want To Read</h4>
+        <div class="row flex-nowrap">
+            {% if want_to_read%}
+            {% for book in want_to_read %}
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
+                <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
+                    class="text-decoration-none text-dark">
+                    <div class="book-card bg-grey border rounded p-3">
+                        <!-- <h6 class="text-truncate">{{book.title}}</h6>
+                        <p class="text-truncate">Author: {{
+                            book.authors[0]}}</p> -->
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
+                    </div>
+                </a>
+            </div>
+
+            {% endfor %}
+            {% else %}
+            <div class="col-sm">
+                <p>You have no books in your want to read list.</p>
+            </div>
+            {% endif%}
+        </div>
+    </div>
+</div>

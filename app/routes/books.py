@@ -10,11 +10,14 @@ books_bp = Blueprint('books_bp', __name__)
 
 @books_bp.route('/search', methods=['POST'])
 def search_google_books():
+    startIndex = int(request.form.get('startIndex', 0))
+    query = request.form.get('query')
     books = []
+
     if request.method == 'POST':
-        query = request.form.get('search')
+        query = request.form.get('query')
         response = requests.get(
-            f"https://www.googleapis.com/books/v1/volumes?q={query}&key={os.environ.get('API_KEY')}&maxResults=40")
+            f"https://www.googleapis.com/books/v1/volumes?q={query}&key={os.environ.get('API_KEY')}&startIndex={startIndex}&printType=books&maxResults=40")
         data = response.json()
         if "items" in data:
             for item in data["items"]:
@@ -23,14 +26,38 @@ def search_google_books():
                     "google_books_id": item["id"],
                     "title": book_info.get("title", "Unknown Title"),
                     "authors": book_info.get("authors", ["Unknown Author"]),
-                    "thumbnail": book_info.get("imageLinks", {}).get("thumbnail", ""),
-                    # "description": book_info.get("description", "No description available."),
-                    # "average_rating": book_info.get("averageRating", None),
-                    # "rating_counts": book_info.get("ratingCounts", 0),
-                    # "buy_link": book_info.get("buyLink", None)
-                })
+                    "thumbnail_url": book_info.get("imageLinks", {}).get("thumbnail", ""),
 
-    return render_template('/users/index.html', books=books)
+                })
+    if current_user.is_authenticated:
+        return render_template('/users/index.html', books=books, query=query, startIndex=startIndex)
+    else:
+        return render_template('/users/anonymous.html', books=books, query=query, startIndex=startIndex)
+
+
+@books_bp.route('/search_genre/<genre>', methods=["GET", "POST"])
+def search_genre(genre):
+    startIndex = request.form.get('startIndex', 0, type=int)
+    genre_books = []
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=subject:{genre}&startIndex={startIndex}&printType=books&maxResults=40"
+    )
+    data = response.json()
+
+    if "items" in data:
+        for item in data["items"]:
+            book_info = item["volumeInfo"]
+            genre_books.append({
+                "google_books_id": item["id"],
+                "title": book_info.get("title", "Unknown Title"),
+                "authors": book_info.get("authors", ["Unknown Author"]),
+                "thumbnail_url": book_info.get("imageLinks", {}).get("thumbnail", ""),
+            })
+
+    if current_user.is_authenticated:
+        return render_template('/users/index.html', books=genre_books, query=genre, startIndex=startIndex)
+    else:
+        return render_template('/users/anonymous.html', books=genre_books, query=genre, startIndex=startIndex)
 
 
 @books_bp.route('/detail/<volume_id>')
@@ -39,7 +66,6 @@ def detail(volume_id):
         f"https://www.googleapis.com/books/v1/volumes/{volume_id}?key={os.environ.get('API_KEY')}")
     data = response.json()
     book_detail = data["volumeInfo"]
-    print(book_detail)
 
     return render_template('books/detail.html', book=book_detail, google_books_id=volume_id)
 
@@ -73,7 +99,7 @@ def save_book():
 
         db.session.add(new_book)
         db.session.flush()
-        
+
         user_book_link = UserBooks(
             user_id=user_id, book_id=new_book.id, status=status)
         db.session.add(user_book_link)
@@ -81,13 +107,13 @@ def save_book():
     else:
         user_book_link = UserBooks.query.filter_by(
             user_id=user_id, book_id=book.id).first()
-        
+
         if user_book_link:
             user_book_link.status = status
-        
+
         else:
             user_book_link = UserBooks(
-            user_id=user_id, book_id=book.id, status=status)
+                user_id=user_id, book_id=book.id, status=status)
         db.session.add(user_book_link)
 
     db.session.commit()

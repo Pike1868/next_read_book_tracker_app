@@ -1,8 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .h-100vh {
   height: 100vh;
 }
 
 .book-card {
+  min-width: 150px; /* adjust this value to fit your design */
   border: 1px solid #ccc;
   padding: 15px;
   margin: 10px;
@@ -15,8 +21,7 @@
 }
 
 .book-thumbnail {
-  width: 90%;
-  max-width: 150px;
+  width: 100%;
   height: auto;
   object-fit: cover;
 }
@@ -34,8 +39,8 @@ h4.font-weight-bold {
   text-decoration: underline;
 }
 
-.users-books {
-  max-width: 150px;
+#user_books_section {
+  max-width: 300px; /* adjust this value to fit your design */
 }
 
 #trash-icon {
@@ -45,4 +50,8 @@ h4.font-weight-bold {
   width: 15px;
   height: 15px;
   cursor: pointer;
+}
+
+.bg-secondary-green {
+  background-color: #bfc4ac;
 }

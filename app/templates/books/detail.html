@@ -25,7 +25,9 @@
     {% else%}
     <p><span class="fw-bold">Ratings Count: </span> N/A </p>
     {% endif %}
-    <p>Buy the book here: {{book["buyLink"]}}</p>
+    <a href="https://amazon.com/s?k={{ book['title']+book['industryIdentifiers'][1]['identifier'] }}" target="_blank">
+        <p>Buy the book here</p>
+    </a>
     <img src="{{ book['imageLinks']['thumbnail'] }}" alt="{{ book['title'] }} thumbnail">
     <p>{{ book.description |safe }}</p>
 </div>

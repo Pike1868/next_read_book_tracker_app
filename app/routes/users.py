@@ -2,9 +2,11 @@ from flask import render_template, request, jsonify
 from flask import Blueprint, render_template, redirect, flash, url_for, current_app, request
 from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from ..models import User, db, UserBooks
+from ..models import User, db, UserBooks, Book
 from ..forms import UserRegistrationForm, UserLoginForm, EditUserForm
 import os
+TOP_GENRES = ["Romance", "Dystopian", "Mystery",
+              "Fantasy", "Science Fiction", "Thriller"]
 
 api_key = os.environ.get('API_KEY')
 
@@ -17,8 +19,19 @@ users_bp = Blueprint('users_bp', __name__, url_prefix='/users')
 def home():
     """Show app homepage"""
     form = UserRegistrationForm()
+    if current_user.is_authenticated:
+        users_books_previously_read = UserBooks.query.filter_by(
+            user_id=current_user.id, status="previously_read").all()
 
-    return render_template("/users/index.html", form=form)
+        users_books_currently_reading = UserBooks.query.filter_by(
+            user_id=current_user.id, status="currently_reading").all()
+
+        users_books_want_to_read = UserBooks.query.filter_by(
+            user_id=current_user.id, status="want_to_read").all()
+
+        return render_template("/users/index.html", form=form, top_genres=TOP_GENRES, previously_read=[ub.book for ub in users_books_previously_read], currently_reading=[ub.book for ub in users_books_currently_reading], want_to_read=[ub.book for ub in users_books_want_to_read])
+    else:
+        return render_template("/users/anonymous.html", form=form, top_genres=TOP_GENRES)
 
 
 @users_bp.route('/sign_up', methods=["GET"])

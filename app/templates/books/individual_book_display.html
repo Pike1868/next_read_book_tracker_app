@@ -1,0 +1,13 @@
+<div class="col-sm book-card users-books">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
+        <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
+            class="text-decoration-none text-dark">
+            <div class="book-card bg-grey border rounded p-3">
+                <h6 class="text-truncate">{{book.title}}</h6>
+                <p class="text-truncate">Author: {{
+                    book.authors[0] }}</p>
+                <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
+            </div>
+        </a>
+    </div>
+</div>
