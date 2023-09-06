@@ -4,13 +4,13 @@
 
 # Project Overview
 
-**Next Read** is a web application developed using Flask. It provides a platform for users to search, save, and categorize books they're reading, have read, or want to read. This app uses the Google Books API for a vast library of book data retrieval. Currently, the app requires enhancements for optimal responsiveness on smaller screens and mobile devices.
+**Next Read** is a web application developed using Flask. It provides a platform for users to search, save, and categorize books they're reading, have read, or want to read. This app leverages the Google Books API for a vast library of book data retrieval. Currently, the app requires enhancements for optimal responsiveness on smaller screens and mobile devices.
 
 ## Why I Chose This Project
 
 ### Problem Statement and Goal
 
-The main objective is to create a platform for both avid readers and beginners who aspire to read more. I wanted to build an app that allowed users to track their books and see the progress on their reading habits, and eventually allow users to create and track their reading goals. Making book discovery both easy and personalized by offering book recommendations based on a user's favorite genres, authors, and previously read books.
+The main objective is to create a platform for both avid readers and beginners who aspire to read more. I wanted to build an app that allowed users to track their books and see the progress on their reading habits, and eventually allow users to create and track their reading goals. This app aims to make book discovery both easy and personalized by offering book recommendations based on a user's favorite genres, authors, and previously read books.
 
 ### Target Demographics
 
@@ -27,40 +27,42 @@ The primary users of this platform are:
 
 ## Project Directory Structure:
 
+```
 next_read_book_tracker/
 │
 ├── app/
-│ ├── init.py # Sets up the Flask application and adds extensions
-│ ├── config.py # Application configuration settings
-│ ├── forms.py # Contains form classes
-│ ├── models.py # Defines database models
-│ │
-│ ├── routes/
-│ │ ├── users.py 
-│ │ └── books.py 
-│ │
-│ ├── static/
-│ │ ├── images/ 
-│ │ └── css/ 
-│ │
-│ ├── templates/
-│ │ ├── books/
-│ │ │ ├── detail.html
-│ │ │ └── user_tracked_books.html
-│ │ │
-│ │ ├── users/
-│ │ │ ├── base.html
-│ │ │ ├── edit.html
-│ │ │ ├── index.html
-│ │ │ ├── profile.html
-│ │ │ ├── sign_in.html
-│ │ │ └── sign_up.html
-│ │
-│ └── tests/
-│ ├── test_books.py # Tests for book-related functionalities
-│ └── test_users.py # Tests for user-related functionalities
+│   ├── __init__.py 
+│   ├── config.py   
+│   ├── forms.py    
+│   ├── models.py  
+│   │
+│   ├── routes/
+│   │   ├── users.py 
+│   │   └── books.py 
+│   │
+│   ├── static/
+│   │   ├── images/ 
+│   │   └── css/ 
+│   │
+│   ├── templates/
+│   │   ├── books/
+│   │   │   ├── detail.html
+│   │   │   └── user_tracked_books.html
+│   │   │
+│   │   ├── users/
+│   │   │   ├── base.html
+│   │   │   ├── edit.html
+│   │   │   ├── index.html
+│   │   │   ├── profile.html
+│   │   │   ├── sign_in.html
+│   │   │   └── sign_up.html
+│   │
+│   └── tests/
+│       ├── test_books.py # Tests for book-related functionalities
+│       └── test_users.py # Tests for user-related functionalities
 │
 └── README.md
+```
 ## Features and Routes
 
 ### User Authentication:
