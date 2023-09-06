@@ -6,3 +6,4 @@ venv/
 .vscode/
 .env
 venv_wsl/
+_requirements.txt

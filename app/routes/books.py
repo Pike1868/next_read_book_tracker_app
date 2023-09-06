@@ -13,12 +13,12 @@ def search_google_books():
     startIndex = int(request.form.get('startIndex', 0))
     query = request.form.get('query')
     books = []
-
     if request.method == 'POST':
         query = request.form.get('query')
         response = requests.get(
             f"https://www.googleapis.com/books/v1/volumes?q={query}&key={os.environ.get('API_KEY')}&startIndex={startIndex}&printType=books&maxResults=40")
         data = response.json()
+
         if "items" in data:
             for item in data["items"]:
                 book_info = item["volumeInfo"]
@@ -29,10 +29,8 @@ def search_google_books():
                     "thumbnail_url": book_info.get("imageLinks", {}).get("thumbnail", ""),
 
                 })
-    if current_user.is_authenticated:
-        return render_template('/users/index.html', books=books, query=query, startIndex=startIndex)
-    else:
-        return render_template('/users/anonymous.html', books=books, query=query, startIndex=startIndex)
+
+    return render_template('/users/index.html', books=books, query=query, startIndex=startIndex)
 
 
 @books_bp.route('/search_genre/<genre>', methods=["GET", "POST"])
@@ -43,6 +41,7 @@ def search_genre(genre):
         f"https://www.googleapis.com/books/v1/volumes?q=subject:{genre}&startIndex={startIndex}&printType=books&maxResults=40"
     )
     data = response.json()
+    print(data)
 
     if "items" in data:
         for item in data["items"]:
@@ -54,10 +53,7 @@ def search_genre(genre):
                 "thumbnail_url": book_info.get("imageLinks", {}).get("thumbnail", ""),
             })
 
-    if current_user.is_authenticated:
-        return render_template('/users/index.html', books=genre_books, query=genre, startIndex=startIndex)
-    else:
-        return render_template('/users/anonymous.html', books=genre_books, query=genre, startIndex=startIndex)
+    return render_template('/users/index.html', books=genre_books, query=genre, startIndex=startIndex)
 
 
 @books_bp.route('/detail/<volume_id>')
@@ -65,6 +61,7 @@ def detail(volume_id):
     response = requests.get(
         f"https://www.googleapis.com/books/v1/volumes/{volume_id}?key={os.environ.get('API_KEY')}")
     data = response.json()
+
     book_detail = data["volumeInfo"]
 
     return render_template('books/detail.html', book=book_detail, google_books_id=volume_id)
@@ -118,7 +115,7 @@ def save_book():
 
     db.session.commit()
 
-    return redirect(url_for('users_bp.user_profile'))
+    return redirect(url_for('main_bp.home'))
 
 
 @books_bp.route('/<volume_id>/remove', methods=["POST"])
@@ -136,7 +133,7 @@ def remove_user_book(volume_id):
     else:
         flash("Book not found in your lists", "warning")
 
-    return redirect(url_for("users_bp.user_profile"))
+    return redirect(url_for("main_bp.home"))
 
 
 ##############################################################################

@@ -1,32 +1,35 @@
-<div class="  bg-secondary-green" id="user_books_section">
-    
-        <div class="container">
-            <h4 class="font-weight-bold m-0">Currently Reading</h4>
-            <div class="row d-block">
-                {% if currently_reading%}
-                {% for book in currently_reading %}
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
-                    <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
-                        class="text-decoration-none text-dark">
-                        <div class="book-card bg-grey border rounded p-3">
-                            <!-- <h6 class="text-truncate">{{book.title}}</h6>
-                            <p class="text-truncate">Author: {{
-                                book.authors[0] }}</p> -->
-                            <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="col-sm">
-                    <p>You have no books in your currently reading list.</p>
-                </div>
-                {% endif%}
-            </div>
-        </div>
+<div class="  bg-secondary-blue text-light" id="user_books_section">
 
     <div class="container">
-        <h4 class="font-weight-bold">Previously Read</h4>
+        <h6 class="font-weight-bold mt-2">Currently Reading</h6>
+        <div class="row d-block">
+            {% if currently_reading%}
+            {% for book in currently_reading %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
+                <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
+                    class="text-decoration-none text-dark">
+                    <div class="user-book-card">
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="user-book-thumbnail">
+                        <form action="{{ url_for('books_bp.remove_user_book', volume_id=book.google_books_id) }}"
+                            method="post">
+                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                            <button type="submit" class="delete-book-btn"
+                                title="Remove book from tracked books">X</button>
+                        </form>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-sm">
+                <p>You have no books in your currently reading list.</p>
+            </div>
+            {% endif%}
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <h6 class="font-weight-bold">Previously Read</h6>
         <div class="row d-block">
             {% if previously_read%}
             {% for book in previously_read %}
@@ -34,11 +37,14 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
                 <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
                     class="text-decoration-none text-dark">
-                    <div class="book-card bg-grey border rounded p-3">
-                        <!-- <h6 class="text-truncate">{{book.title}}</h6>
-                        <p class="text-truncate">Author: {{
-                            book.authors[0] }}</p> -->
-                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
+                    <div class="user-book-card">
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="user-book-thumbnail">
+                        <form action="{{ url_for('books_bp.remove_user_book', volume_id=book.google_books_id) }}"
+                            method="post">
+                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                            <button type="submit" class="delete-book-btn"
+                                title="Remove book from tracked books">X</button>
+                        </form>
                     </div>
                 </a>
             </div>
@@ -51,8 +57,9 @@
             {% endif%}
         </div>
     </div>
+    <hr>
     <div class="container">
-        <h4 class="font-weight-bold">Want To Read</h4>
+        <h6 class="font-weight-bold">Want To Read</h6>
         <div class="row d-block">
             {% if want_to_read%}
             {% for book in want_to_read %}
@@ -60,11 +67,14 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
                 <a href="{{ url_for('books_bp.detail', volume_id=book.google_books_id) }}"
                     class="text-decoration-none text-dark">
-                    <div class="book-card bg-grey border rounded p-3">
-                        <!-- <h6 class="text-truncate">{{book.title}}</h6>
-                        <p class="text-truncate">Author: {{
-                            book.authors[0]}}</p> -->
-                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="book-thumbnail">
+                    <div class="user-book-card">
+                        <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" class="user-book-thumbnail">
+                        <form action="{{ url_for('books_bp.remove_user_book', volume_id=book.google_books_id) }}"
+                            method="post">
+                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                            <button type="submit" class="delete-book-btn"
+                                title="Remove book from tracked books">X</button>
+                        </form>
                     </div>
                 </a>
             </div>
