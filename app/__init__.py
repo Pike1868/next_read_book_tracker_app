@@ -1,18 +1,25 @@
 from flask import Flask
 from .models import db, connect_db, bcrypt
 from .config import Config
-from .routes.main_routes import main
+from .routes.users import main_bp as main
+from .routes.users import users_bp as users
+from .routes.books import books_bp as books
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
+from flask_migrate import Migrate
+from dotenv import load_dotenv
+load_dotenv()
 
 # Set flask app environment variable with cmd below before flask run
 # export FLASK_APP="app:create_app('Config')"
 # for testing: export FLASK_APP="app:create_app('Testing')"
 
-# instantiated at the module level 
+# instantiated at the module level
 login_manager = LoginManager()
 
 # The User Loader function tells Flask-Login how to find a specific user object based on they're ID
+
+
 @login_manager.user_loader
 def load_user(user_id):
     from .models import User
@@ -20,19 +27,23 @@ def load_user(user_id):
 
 
 def create_app(config_name):
-    """Creates the flask app context"""
+    """Flask Application Factory function: Creates the flask app context, initializes 
+       extensions using the app instance, registers blueprints, returns the app."""
+
     app = Flask(__name__)
     app.config.from_object(f"app.config.{config_name}")
-    toolbar = DebugToolbarExtension(app)
     connect_db(app)
     db.init_app(app)
     bcrypt.init_app(app)
-
-    
-    # While the object is instantiated at the module level, it is initialized inside the create_app function using the app instance.
     login_manager.init_app(app)
-    
-    # Register blueprints here
+    login_manager.login_view = 'users_bp.sign_in'
+    login_manager.login_message = "Please sign in to access this page/feature."
+    login_manager.login_message_category = "danger"
+
+    migrate = Migrate(app, db)
+
     app.register_blueprint(main)
-    
+    app.register_blueprint(users)
+    app.register_blueprint(books)
+
     return app
