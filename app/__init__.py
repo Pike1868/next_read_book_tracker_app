@@ -1,6 +1,6 @@
 from flask import Flask
 from .models import db, connect_db, bcrypt
-from .config import Config
+from .config import Config, Testing
 from .routes.users import main_bp as main
 from .routes.users import users_bp as users
 from .routes.books import books_bp as books
@@ -10,14 +10,7 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 load_dotenv()
 
-# Set flask app environment variable with cmd below before flask run
-# export FLASK_APP="app:create_app('Config')"
-# for testing: export FLASK_APP="app:create_app('Testing')"
-
-# instantiated at the module level
 login_manager = LoginManager()
-
-# The User Loader function tells Flask-Login how to find a specific user object based on they're ID
 
 
 @login_manager.user_loader
@@ -26,12 +19,20 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-def create_app(config_name):
+def create_app(config_name='Config'):
     """Flask Application Factory function: Creates the flask app context, initializes 
        extensions using the app instance, registers blueprints, returns the app."""
 
     app = Flask(__name__)
-    app.config.from_object(f"app.config.{config_name}")
+
+    # Dynamically select the configuration class based on the 'config_name' argument
+    if config_name == 'Config':
+        app.config.from_object(Config)
+    elif config_name == 'Testing':
+        app.config.from_object(Testing)
+    else:
+        raise ValueError("Invalid configuration name")
+
     connect_db(app)
     db.init_app(app)
     bcrypt.init_app(app)
