@@ -41,7 +41,7 @@ def search_genre(genre):
         f"https://www.googleapis.com/books/v1/volumes?q=subject:{genre}&startIndex={startIndex}&printType=books&maxResults=40"
     )
     data = response.json()
-    print(data)
+    # print(data)
 
     if "items" in data:
         for item in data["items"]:
